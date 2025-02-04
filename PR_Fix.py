@@ -60,10 +60,10 @@ def is_event_match(artist, event_date, event_venue):
 def update_event_data(event_data, spreadsheet_data):
     for event in event_data:
         # Iterate through spreadsheet data and update if there's a match
-        for row in spreadsheet_data:
+        for idx, row in enumerate(spreadsheet_data):
             # Compare Artist, Event Date, and Venue
             if (event['Artist'] == row['Artist'] and
-                event['Date'] == row['Date'] and
+                event['Event Date'] == row['Date'] and
                 event['Venue'].startswith(row['Venue'])):  # Strip extra spaces and check for match
 
                 date = row['Date']
@@ -72,6 +72,8 @@ def update_event_data(event_data, spreadsheet_data):
                 row['Views'] = event['Views']
                 row['Timestamp'] = event['Timestamp']
                 row['Date'] = date
+                row['rowIndex'] = idx + 2
+
                 break  # Once matched, no need to continue checking other rows
     return spreadsheet_data
 
@@ -190,7 +192,7 @@ try:
                 content_desc = element.tag_name
                 pattern = r"^(?P<month>\w+), (?P<day>\d+), .*?, (?P<event_name>.+?), (?P<time>.+?), (?P<venue>.+?)$"
 
-                for attempt in range(1):
+                for attempt in range(2):
                     try:
                         match = re.match(pattern, content_desc)
                         if match:
@@ -313,9 +315,9 @@ finally:
     # Call the function to update the event data
     updated_event_data = update_event_data(event_datas, spreadsheet_data)
     print(updated_event_data)
-    for idx, row in enumerate(updated_event_data):
-        row['rowIndex'] = idx + 2
-    print(updated_event_data)
+    # for idx, row in enumerate(updated_event_data):
+    #     row['rowIndex'] = idx + 2
+    # print(updated_event_data)
     # Post the modified data back:
     post_response = post_data_to_spreadsheet(web_app_url, spreadsheet_data)
 
