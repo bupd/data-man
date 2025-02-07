@@ -70,7 +70,7 @@ def update_event_data(event_data, spreadsheet_data):
 
             # Compare Artist, Event Date, and Venue
             if (event['Artist'] == row['Artist'] and
-                event['Event Date'] == row['Date'] and
+                event['Event Date'] == format_date(row['Date']) and
                 event['Venue'].startswith(row['Venue'])):  # Strip extra spaces and check for match
 
                 date = row['Date']
@@ -90,7 +90,7 @@ def format_date(curr_date):
     """This will fing format your date correctly if you are even out of your mind."""
     try:
         # Attempt to parse in MM/DD/YYYY format
-        date = datetime.strptime(curr_date, "%m/%d/%Y").strftime("%m/%d/%Y")
+        date = datetime.strptime(curr_date, "%m-%d-%Y").strftime("%m/%d/%Y")
         return date
     except ValueError:
         # If the above fails, try parsing in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)
@@ -302,12 +302,11 @@ try:
     # print(spreadsheet_data)
     if spreadsheet_data:
         logging.info("Data retrieved from spreadsheet.")
-        print("Data retrieved from spreadsheet.")
+        # print("Data retrieved from spreadsheet.")
         # print("printing spreadsheet.")
         print(spreadsheet_data)
         for data in spreadsheet_data:
             curr_date = data['Date']  # 'Date' is assumed to be a key in each item
-            # print(f"curent fucking date: {curr_date}")
             date = format_date(curr_date)
             # # try this if it fails
             # date = datetime.strptime(curr_date, "%m/%d/%Y").strftime("%m/%d/%Y")
