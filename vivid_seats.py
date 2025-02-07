@@ -63,9 +63,11 @@ def is_event_match(artist, event_date, event_venue):
 
 # Function to update event data based on the spreadsheet data
 def update_event_data(event_data, spreadsheet_data):
-    for event in event_data:
         # Iterate through spreadsheet data and update if there's a match
-        for idx, row in enumerate(spreadsheet_data):
+    for idx, row in enumerate(spreadsheet_data):
+
+        for event in event_data:
+
             # Compare Artist, Event Date, and Venue
             if (event['Artist'] == row['Artist'] and
                 event['Event Date'] == row['Date'] and
@@ -295,7 +297,7 @@ try:
             logging.error(f"collect_event_details(): {e}")
             print(f"collect_event_details(): {e}")
             #raise
-            
+
     # core logic lying here
     # print(spreadsheet_data)
     if spreadsheet_data:
